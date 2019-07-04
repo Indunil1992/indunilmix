@@ -1,0 +1,98 @@
+{
+  "EDITOR_STATE": {
+    "allProjectFiles": {
+      "bad92591-dc99-4e90-9ce2-1873b3082f7d": {
+        "id": "bad92591-dc99-4e90-9ce2-1873b3082f7d",
+        "parent": null,
+        "name": "indunilmix",
+        "type": "DIRECTORY",
+        "isDirectory": true,
+        "children": [
+          "e625f01f-d2b8-47b3-a225-97e7f0ea8927"
+        ],
+        "isRemovable": false,
+        "filePath": "indunilmix"
+      },
+      "e625f01f-d2b8-47b3-a225-97e7f0ea8927": {
+        "id": "e625f01f-d2b8-47b3-a225-97e7f0ea8927",
+        "parent": "bad92591-dc99-4e90-9ce2-1873b3082f7d",
+        "name": "lambda.js",
+        "type": "JS_LAMBDA",
+        "isDirectory": false,
+        "children": [],
+        "isRemovable": true,
+        "filePath": "indunilmix/lambda.js",
+        "code": "exports.handler = function(event, context, callback) {\n\n\n\n    \n    \n    callback(null, {\"message\": \"Successfully executed\"});\n}",
+        "config": {
+          "runtime": "nodejs8.10",
+          "handler": "handler",
+          "timeout": 60,
+          "memory": 128,
+          "layers": []
+        },
+        "triggers": [
+          {
+            "resourceName": "s3indunil",
+            "config": {
+              "type": "s3:ObjectCreated:Post",
+              "keyPrefix": "",
+              "keySuffix": ""
+            }
+          }
+        ]
+      }
+    },
+    "deletedFiles": [],
+    "rootNode": "bad92591-dc99-4e90-9ce2-1873b3082f7d",
+    "openFiles": [
+      "e625f01f-d2b8-47b3-a225-97e7f0ea8927"
+    ],
+    "currentFileId": "e625f01f-d2b8-47b3-a225-97e7f0ea8927",
+    "resources": {
+      "s3indunil": {
+        "name": "s3indunil",
+        "type": "S3",
+        "config": {
+          "mode": 0,
+          "bucket": {
+            "region": "us-east-1",
+            "name": "indunil"
+          }
+        }
+      }
+    },
+    "customTemplate": {
+      "dialect": null,
+      "definitions": {}
+    },
+    "envVariables": [
+      {
+        "lambdaId": "all",
+        "varKey": "SIGMA_AWS_ACC_ID",
+        "varValue": null,
+        "shouldPersist": false,
+        "displayOnly": false,
+        "editable": false
+      }
+    ],
+    "packageJSON": {
+      "dependencies": {}
+    }
+  },
+  "PROJECT_META": {
+    "projectName": "indunilmix",
+    "projectDescription": "1111",
+    "projectVersion": "1.0.0",
+    "projectRegion": "us-east-1",
+    "platform": "AWS",
+    "platformRegions": {},
+    "lastSave": 1562249262298
+  },
+  "VCS_STATE": {
+    "provider": "GitHub",
+    "repo": {
+      "name": "indunilmix",
+      "url": "https://github.com/Indunil1992/indunilmix"
+    }
+  }
+}
