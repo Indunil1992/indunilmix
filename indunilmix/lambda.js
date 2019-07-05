@@ -32,7 +32,12 @@ exports.handler = function (event, context, callback) {
         MessageBody: 'hiru test',
         QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.SIGMA_AWS_ACC_ID}/hiruindu`,
         DelaySeconds: '0',
-        MessageAttributes: {}
+        MessageAttributes: {
+            "x": {
+                "DataType": "String",
+                "StringValue": "1"
+            }
+        }
     }, function (data) {
         console.log("Success");
         // your logic (logging etc) to handle successful message delivery, should be here
