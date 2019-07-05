@@ -22,7 +22,7 @@
         "children": [],
         "isRemovable": true,
         "filePath": "indunilmix/lambda.js",
-        "code": "let AWS = require('aws-sdk');\nlet SL_AWS = require('slappforge-sdk-aws');\nconst sqs = new SL_AWS.SQS(AWS);\n\nexports.handler = function (event, context, callback) {\n\n\n    sqs.sendMessage({\n        MessageBody: 'SQS check',\n        QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.SIGMA_AWS_ACC_ID}/indunilLIFO`,\n        DelaySeconds: '0',\n        MessageDeduplicationId: '123',\n        MessageGroupId: '142',\n        MessageAttributes: {\n            \"@a\": {\n                \"DataType\": \"String\",\n                \"StringValue\": \"1\"\n            }\n        }\n    }, function (data) {\n        console.log(\"success - S3\" + { data });\n        callback(null, \"Successfully executed to enduser data\" + { data });\n        // your logic (logging etc) to handle successful message delivery, should be here\n\n    }, function (error) {\n        // your logic (logging etc) to handle failures, should be here\n        console.log(\"error - S3\" + { err });\n        callback(null, \"Successfully executed to enduser catch\" + { err });\n    });\n\n    sqs.sendMessage({\n        MessageBody: 'hiru test',\n        QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.SIGMA_AWS_ACC_ID}/hiruindu`,\n        DelaySeconds: '0',\n        MessageAttributes: {\n            \"x\": {\n                \"DataType\": \"String\",\n                \"StringValue\": \"1\"\n            },\n            \"d\": {\n                \"DataType\": \"String\",\n                \"StringValue\": \"1\"\n            }\n        }\n    }, function (data) {\n        console.log(\"Success\");\n        // your logic (logging etc) to handle successful message delivery, should be here\n    }, function (error) {\n        console.log(\"error\");\n        // your logic (logging etc) to handle failures, should be here\n    });\n\n\n\n    callback(null, { \"message\": \"Successfully executed\" });\n}",
+        "code": "let AWS = require('aws-sdk');\nlet SL_AWS = require('slappforge-sdk-aws');\nconst sqs = new SL_AWS.SQS(AWS);\n\nexports.handler = function (event, context, callback) {\n\n\n    sqs.sendMessage({\n        MessageBody: 'SQS check',\n        QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.SIGMA_AWS_ACC_ID}/hiruindu`,\n        DelaySeconds: '0',\n        MessageDeduplicationId: '123',\n        MessageGroupId: '142',\n        MessageAttributes: {\n            \"@a\": {\n                \"DataType\": \"String\",\n                \"StringValue\": \"1\"\n            }\n        }\n    }, function (data) {\n        console.log(\"success - S3\" + { data });\n        callback(null, \"Successfully executed to enduser data\" + { data });\n        // your logic (logging etc) to handle successful message delivery, should be here\n\n    }, function (error) {\n        // your logic (logging etc) to handle failures, should be here\n        console.log(\"error - S3\" + { err });\n        callback(null, \"Successfully executed to enduser catch\" + { err });\n    });\n\n    sqs.sendMessage({\n        MessageBody: 'hiru test',\n        QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.SIGMA_AWS_ACC_ID}/hiruindu`,\n        DelaySeconds: '0',\n        MessageAttributes: {\n            \"x\": {\n                \"DataType\": \"String\",\n                \"StringValue\": \"1\"\n            },\n            \"d\": {\n                \"DataType\": \"String\",\n                \"StringValue\": \"1\"\n            }\n        }\n    }, function (data) {\n        console.log(\"Success\");\n        // your logic (logging etc) to handle successful message delivery, should be here\n    }, function (error) {\n        console.log(\"error\");\n        // your logic (logging etc) to handle failures, should be here\n    });\n\n    sqs.receiveMessage({\n        QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.SIGMA_AWS_ACC_ID}/lp`,\n        AttributeNames: ['All'],\n        MaxNumberOfMessages: '1',\n        VisibilityTimeout: '30',\n        WaitTimeSeconds: '0'\n    }).promise()\n        .then(receivedMsgData => {\n            if (!!(receivedMsgData) && !!(receivedMsgData.Messages)) {\n                let receivedMessages = receivedMsgData.Messages;\n                receivedMessages.forEach(message => {\n                    // your logic to access each message through out the loop. Each message is available under variable message \n                    // within this block\n                });\n            } else {\n                // No messages to process\n            }\n        })\n        .catch(err => {\n            // error handling goes here\n        });\n\n\n\n\n    callback(null, { \"message\": \"Successfully executed\" });\n}",
         "config": {
           "runtime": "nodejs8.10",
           "handler": "handler",
@@ -149,7 +149,7 @@
         "type": "SQS",
         "config": {
           "mode": 0,
-          "existing": false,
+          "existing": true,
           "name": "hiruindu",
           "url": "https://sqs.us-east-1.amazonaws.com/318300609668/hiruindu",
           "selectedRegion": "us-east-1",
@@ -167,7 +167,131 @@
           "messageRetentionPeriodUnit": "days",
           "maximumMessageSize": 256,
           "receiveMessageWaitTime": 0,
-          "deadLetterQueueName": ""
+          "deadLetterQueueName": "",
+          "createdByApp": true
+        }
+      },
+      "sqstestQueuefifo": {
+        "name": "sqstestQueuefifo",
+        "type": "SQS",
+        "config": {
+          "mode": 1,
+          "existing": true,
+          "name": "test-queue.fifo",
+          "url": "https://sqs.us-east-1.amazonaws.com/318300609668/test-queue.fifo",
+          "selectedRegion": "us-east-1",
+          "deliveryDelay": "0",
+          "deliveryDelayUnit": "seconds",
+          "queueType": "fifoQueue",
+          "defaultVisibilityTimeout": "30",
+          "defaultVisibilityTimeoutUnit": "seconds",
+          "messageRetentionPeriod": "345600",
+          "messageRetentionPeriodUnit": "seconds",
+          "maximumMessageSize": 256,
+          "receiveMessageWaitTime": "0",
+          "queueARN": "arn:aws:sqs:us-east-1:318300609668:test-queue.fifo"
+        }
+      },
+      "sqssa": {
+        "name": "sqssa",
+        "type": "SQS",
+        "config": {
+          "mode": 0,
+          "existing": false,
+          "name": "sa",
+          "url": "https://sqs.us-east-1.amazonaws.com/318300609668/sa",
+          "selectedRegion": "us-east-1",
+          "deliveryDelay": 0,
+          "deliveryDelayUnit": "seconds",
+          "useRedrivePolicy": false,
+          "useSSE": false,
+          "kmsCustomerMasterKey": "default",
+          "accountId": "318300609668",
+          "dataKeyReusePeriod": 5,
+          "queueType": "standardQueue",
+          "defaultVisibilityTimeout": 30,
+          "defaultVisibilityTimeoutUnit": "seconds",
+          "messageRetentionPeriod": 4,
+          "messageRetentionPeriodUnit": "days",
+          "maximumMessageSize": 256,
+          "receiveMessageWaitTime": 0,
+          "deadLetterQueueName": "",
+          "contentBasedDeduplication": false
+        }
+      },
+      "sqssamfifo": {
+        "name": "sqssamfifo",
+        "type": "SQS",
+        "config": {
+          "mode": 0,
+          "existing": false,
+          "name": "sam.fifo",
+          "url": "https://sqs.us-east-1.amazonaws.com/318300609668/sam.fifo",
+          "selectedRegion": "us-east-1",
+          "deliveryDelay": 0,
+          "deliveryDelayUnit": "seconds",
+          "useRedrivePolicy": false,
+          "useSSE": false,
+          "kmsCustomerMasterKey": "default",
+          "accountId": "318300609668",
+          "dataKeyReusePeriod": 5,
+          "queueType": "fifoQueue",
+          "defaultVisibilityTimeout": 30,
+          "defaultVisibilityTimeoutUnit": "seconds",
+          "messageRetentionPeriod": 4,
+          "messageRetentionPeriodUnit": "days",
+          "maximumMessageSize": 256,
+          "receiveMessageWaitTime": 0,
+          "deadLetterQueueName": "",
+          "contentBasedDeduplication": false
+        }
+      },
+      "sqsHiru1T": {
+        "name": "sqsHiru1T",
+        "type": "SQS",
+        "config": {
+          "mode": 1,
+          "existing": true,
+          "name": "Hiru1T",
+          "url": "https://sqs.us-east-1.amazonaws.com/318300609668/Hiru1T",
+          "selectedRegion": "us-east-1",
+          "deliveryDelay": "0",
+          "deliveryDelayUnit": "seconds",
+          "queueType": "standardQueue",
+          "defaultVisibilityTimeout": "120",
+          "defaultVisibilityTimeoutUnit": "seconds",
+          "messageRetentionPeriod": "345600",
+          "messageRetentionPeriodUnit": "seconds",
+          "maximumMessageSize": 256,
+          "receiveMessageWaitTime": "0",
+          "queueARN": "arn:aws:sqs:us-east-1:318300609668:Hiru1T"
+        }
+      },
+      "sqslp": {
+        "name": "sqslp",
+        "type": "SQS",
+        "config": {
+          "mode": 0,
+          "existing": false,
+          "name": "lp",
+          "url": "https://sqs.us-east-1.amazonaws.com/318300609668/lp",
+          "selectedRegion": "us-east-1",
+          "deliveryDelay": 0,
+          "deliveryDelayUnit": "seconds",
+          "useRedrivePolicy": false,
+          "useSSE": false,
+          "kmsCustomerMasterKey": "default",
+          "accountId": "318300609668",
+          "dataKeyReusePeriod": 5,
+          "queueType": "standardQueue",
+          "defaultVisibilityTimeout": 30,
+          "defaultVisibilityTimeoutUnit": "seconds",
+          "messageRetentionPeriod": 4,
+          "messageRetentionPeriodUnit": "days",
+          "maximumMessageSize": 256,
+          "receiveMessageWaitTime": 0,
+          "deadLetterQueueName": "",
+          "contentBasedDeduplication": false
         }
       }
     },
@@ -213,7 +337,7 @@
     "projectRegion": "us-east-1",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1562314305601
+    "lastSave": 1562316313602
   },
   "VCS_STATE": {
     "provider": "GitHub",

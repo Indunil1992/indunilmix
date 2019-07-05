@@ -7,7 +7,7 @@ exports.handler = function (event, context, callback) {
 
     sqs.sendMessage({
         MessageBody: 'SQS check',
-        QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.SIGMA_AWS_ACC_ID}/indunilLIFO`,
+        QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.SIGMA_AWS_ACC_ID}/hiruindu`,
         DelaySeconds: '0',
         MessageDeduplicationId: '123',
         MessageGroupId: '142',
@@ -49,6 +49,29 @@ exports.handler = function (event, context, callback) {
         console.log("error");
         // your logic (logging etc) to handle failures, should be here
     });
+
+    sqs.receiveMessage({
+        QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.SIGMA_AWS_ACC_ID}/lp`,
+        AttributeNames: ['All'],
+        MaxNumberOfMessages: '1',
+        VisibilityTimeout: '30',
+        WaitTimeSeconds: '0'
+    }).promise()
+        .then(receivedMsgData => {
+            if (!!(receivedMsgData) && !!(receivedMsgData.Messages)) {
+                let receivedMessages = receivedMsgData.Messages;
+                receivedMessages.forEach(message => {
+                    // your logic to access each message through out the loop. Each message is available under variable message 
+                    // within this block
+                });
+            } else {
+                // No messages to process
+            }
+        })
+        .catch(err => {
+            // error handling goes here
+        });
+
 
 
 
