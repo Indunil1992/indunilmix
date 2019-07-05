@@ -22,7 +22,7 @@
         "children": [],
         "isRemovable": true,
         "filePath": "indunilmix/lambda.js",
-        "code": "let AWS = require('aws-sdk');\nlet SL_AWS = require('slappforge-sdk-aws');\nconst sqs = new SL_AWS.SQS(AWS);\n\nexports.handler = function (event, context, callback) {\n\n\n    sqs.sendMessage({\n        MessageBody: 'SQS check',\n        QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.SIGMA_AWS_ACC_ID}/indunilLIFO`,\n        DelaySeconds: '0',\n        MessageDeduplicationId: '123',\n        MessageGroupId: '142',\n        MessageAttributes: {\n            \"@a\": {\n                \"DataType\": \"String\",\n                \"StringValue\": \"1\"\n            }\n        }\n    }, function (data) {\n        console.log(\"success - S3\" + { data });\n        callback(null, \"Successfully executed to enduser data\" + { data });\n        // your logic (logging etc) to handle successful message delivery, should be here\n\n    }, function (error) {\n        // your logic (logging etc) to handle failures, should be here\n        console.log(\"error - S3\" + { err });\n        callback(null, \"Successfully executed to enduser catch\" + { err });\n    });\n\n    sqs.sendMessage({\n        MessageBody: 'hiru test',\n        QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.SIGMA_AWS_ACC_ID}/hiruindu`,\n        DelaySeconds: '0',\n        MessageAttributes: {\n            \"x\": {\n                \"DataType\": \"String\",\n                \"StringValue\": \"1\"\n            }\n        }\n    }, function (data) {\n        console.log(\"Success\");\n        // your logic (logging etc) to handle successful message delivery, should be here\n    }, function (error) {\n        console.log(\"error\");\n        // your logic (logging etc) to handle failures, should be here\n    });\n\n\n\n    callback(null, { \"message\": \"Successfully executed\" });\n}",
+        "code": "let AWS = require('aws-sdk');\nlet SL_AWS = require('slappforge-sdk-aws');\nconst sqs = new SL_AWS.SQS(AWS);\n\nexports.handler = function (event, context, callback) {\n\n\n    sqs.sendMessage({\n        MessageBody: 'SQS check',\n        QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.SIGMA_AWS_ACC_ID}/indunilLIFO`,\n        DelaySeconds: '0',\n        MessageDeduplicationId: '123',\n        MessageGroupId: '142',\n        MessageAttributes: {\n            \"@a\": {\n                \"DataType\": \"String\",\n                \"StringValue\": \"1\"\n            }\n        }\n    }, function (data) {\n        console.log(\"success - S3\" + { data });\n        callback(null, \"Successfully executed to enduser data\" + { data });\n        // your logic (logging etc) to handle successful message delivery, should be here\n\n    }, function (error) {\n        // your logic (logging etc) to handle failures, should be here\n        console.log(\"error - S3\" + { err });\n        callback(null, \"Successfully executed to enduser catch\" + { err });\n    });\n\n    sqs.sendMessage({\n        MessageBody: 'hiru test',\n        QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.SIGMA_AWS_ACC_ID}/hiruindu`,\n        DelaySeconds: '0',\n        MessageAttributes: {\n            \"x\": {\n                \"DataType\": \"String\",\n                \"StringValue\": \"1\"\n            },\n            \"d\": {\n                \"DataType\": \"String\",\n                \"StringValue\": \"1\"\n            }\n        }\n    }, function (data) {\n        console.log(\"Success\");\n        // your logic (logging etc) to handle successful message delivery, should be here\n    }, function (error) {\n        console.log(\"error\");\n        // your logic (logging etc) to handle failures, should be here\n    });\n\n\n\n    callback(null, { \"message\": \"Successfully executed\" });\n}",
         "config": {
           "runtime": "nodejs8.10",
           "handler": "handler",
@@ -111,7 +111,7 @@
         "type": "SQS",
         "config": {
           "mode": 0,
-          "existing": false,
+          "existing": true,
           "name": "indunilLIFO",
           "url": "https://sqs.us-east-1.amazonaws.com/318300609668/indunilLIFO",
           "selectedRegion": "us-east-1",
@@ -129,7 +129,8 @@
           "messageRetentionPeriodUnit": "days",
           "maximumMessageSize": 256,
           "receiveMessageWaitTime": 0,
-          "deadLetterQueueName": ""
+          "deadLetterQueueName": "",
+          "createdByApp": true
         }
       },
       "s3indunils3": {
@@ -148,7 +149,7 @@
         "type": "SQS",
         "config": {
           "mode": 0,
-          "existing": true,
+          "existing": false,
           "name": "hiruindu",
           "url": "https://sqs.us-east-1.amazonaws.com/318300609668/hiruindu",
           "selectedRegion": "us-east-1",
@@ -166,289 +167,14 @@
           "messageRetentionPeriodUnit": "days",
           "maximumMessageSize": 256,
           "receiveMessageWaitTime": 0,
-          "deadLetterQueueName": "",
-          "createdByApp": true
+          "deadLetterQueueName": ""
         }
       }
     },
     "customTemplate": {
       "dialect": "CloudFormation",
       "definitions": {
-        "AWSTemplateFormatVersion": "2010-09-09",
-        "Description": "This template creates the stack for project indunilmix. Generated by Sigma",
-        "Outputs": {
-          "sqsindunilLIFO": {
-            "Description": "URL of SQS queue indunilLIFO",
-            "Value": {
-              "Ref": "sqsindunilLIFO"
-            }
-          },
-          "sqshiruindu": {
-            "Description": "URL of SQS queue hiruindu",
-            "Value": {
-              "Ref": "sqshiruindu"
-            }
-          }
-        },
-        "Resources": {
-          "sqsindunilLIFO": {
-            "Type": "AWS::SQS::Queue",
-            "Properties": {
-              "DelaySeconds": 0,
-              "MaximumMessageSize": 262144,
-              "MessageRetentionPeriod": 345600,
-              "QueueName": "indunilLIFO",
-              "ReceiveMessageWaitTimeSeconds": 0,
-              "VisibilityTimeout": 75
-            }
-          },
-          "sqshiruindu": {
-            "Type": "AWS::SQS::Queue",
-            "Properties": {
-              "DelaySeconds": 0,
-              "MaximumMessageSize": 262144,
-              "MessageRetentionPeriod": 345600,
-              "QueueName": "hiruindu",
-              "ReceiveMessageWaitTimeSeconds": 0,
-              "VisibilityTimeout": 120
-            }
-          },
-          "indunilmixlambda": {
-            "Type": "AWS::Lambda::Function",
-            "Properties": {
-              "FunctionName": "indunilmixlambda",
-              "Description": "Invokes functions defined in indunilmix/lambda.js in project indunilmix. Generated by Sigma.",
-              "Code": {
-                "S3Bucket": "com.sigma.test.318300609668.sachithra.us-east-1",
-                "S3Key": "indunilmix/sigma_builds/build_1562313854423.zip"
-              },
-              "MemorySize": 128,
-              "Handler": "indunilmix/lambda.handler",
-              "Timeout": 60,
-              "Runtime": "nodejs8.10",
-              "Layers": [],
-              "Role": {
-                "Fn::GetAtt": [
-                  "indunilmixlambdaExecutionRole",
-                  "Arn"
-                ]
-              },
-              "Environment": {
-                "Variables": {
-                  "SIGMA_AWS_ACC_ID": "318300609668"
-                }
-              }
-            }
-          },
-          "indunilmixlambdaExecutionRole": {
-            "Type": "AWS::IAM::Role",
-            "Properties": {
-              "ManagedPolicyArns": [
-                "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-              ],
-              "AssumeRolePolicyDocument": {
-                "Version": "2012-10-17",
-                "Statement": [
-                  {
-                    "Action": [
-                      "sts:AssumeRole"
-                    ],
-                    "Effect": "Allow",
-                    "Principal": {
-                      "Service": [
-                        "lambda.amazonaws.com"
-                      ]
-                    }
-                  }
-                ]
-              },
-              "Policies": [
-                {
-                  "PolicyName": "indunilmixlambdaPolicy",
-                  "PolicyDocument": {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                      {
-                        "Effect": "Allow",
-                        "Action": [
-                          "sqs:SendMessage"
-                        ],
-                        "Resource": {
-                          "Fn::GetAtt": [
-                            "sqsindunilLIFO",
-                            "Arn"
-                          ]
-                        }
-                      },
-                      {
-                        "Effect": "Allow",
-                        "Action": [
-                          "sqs:SendMessage"
-                        ],
-                        "Resource": {
-                          "Fn::GetAtt": [
-                            "sqshiruindu",
-                            "Arn"
-                          ]
-                        }
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          },
-          "s3indunil1Permission": {
-            "Type": "AWS::Lambda::Permission",
-            "Properties": {
-              "Action": "lambda:InvokeFunction",
-              "FunctionName": {
-                "Ref": "indunilmixlambda"
-              },
-              "SourceArn": "arn:aws:s3:::indunil1",
-              "Principal": "s3.amazonaws.com"
-            }
-          },
-          "s3indunil1Cli0indunilmixlambda": {
-            "Type": "Custom::cli2cloudformation",
-            "Properties": {
-              "ServiceToken": {
-                "Fn::GetAtt": [
-                  "cli2cloudformationindunilmix",
-                  "Arn"
-                ]
-              },
-              "CliCommandCreate": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "aws s3api put-bucket-notification-configuration --bucket indunil1 --notification-configuration ",
-                    "\"LambdaFunctionConfigurations=[",
-                    {
-                      "Fn::Join": [
-                        ",",
-                        [
-                          {
-                            "Fn::Join": [
-                              "",
-                              [
-                                "{Events=[s3:ObjectRemoved:*],LambdaFunctionArn=",
-                                {
-                                  "Fn::GetAtt": [
-                                    "indunilmixlambda",
-                                    "Arn"
-                                  ]
-                                },
-                                "}"
-                              ]
-                            ]
-                          }
-                        ]
-                      ]
-                    },
-                    "]\""
-                  ]
-                ]
-              },
-              "CliCommandDelete": "aws s3api put-bucket-notification-configuration --bucket indunil1 --notification-configuration '{}'",
-              "CliCommandUpdate": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "aws s3api put-bucket-notification-configuration --bucket indunil1 --notification-configuration ",
-                    "\"LambdaFunctionConfigurations=[",
-                    {
-                      "Fn::Join": [
-                        ",",
-                        [
-                          {
-                            "Fn::Join": [
-                              "",
-                              [
-                                "{Events=[s3:ObjectRemoved:*],LambdaFunctionArn=",
-                                {
-                                  "Fn::GetAtt": [
-                                    "indunilmixlambda",
-                                    "Arn"
-                                  ]
-                                },
-                                "}"
-                              ]
-                            ]
-                          }
-                        ]
-                      ]
-                    },
-                    "]\""
-                  ]
-                ]
-              }
-            }
-          },
-          "cli2cloudformationindunilmix": {
-            "Type": "AWS::Lambda::Function",
-            "Properties": {
-              "FunctionName": "cli2cloudformationindunilmix",
-              "Description": "This is a utility lambda generated by Sigma, for bringing CF-unsupported operations into the CF template. Kudos to https://github.com/lucioveloso/cli2cloudformation",
-              "Code": {
-                "S3Bucket": "resources.us-east-1.sigma.slappforge.com",
-                "S3Key": "CF/cf_shell_v1.zip"
-              },
-              "MemorySize": 128,
-              "Handler": "index.lambda_handler",
-              "Timeout": 60,
-              "Runtime": "python2.7",
-              "Layers": [],
-              "Role": {
-                "Fn::GetAtt": [
-                  "cli2cloudformationindunilmixExecutionRole",
-                  "Arn"
-                ]
-              }
-            }
-          },
-          "cli2cloudformationindunilmixExecutionRole": {
-            "Type": "AWS::IAM::Role",
-            "Properties": {
-              "ManagedPolicyArns": [
-                "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-              ],
-              "AssumeRolePolicyDocument": {
-                "Version": "2012-10-17",
-                "Statement": [
-                  {
-                    "Action": [
-                      "sts:AssumeRole"
-                    ],
-                    "Effect": "Allow",
-                    "Principal": {
-                      "Service": [
-                        "lambda.amazonaws.com"
-                      ]
-                    }
-                  }
-                ]
-              },
-              "Policies": [
-                {
-                  "PolicyName": "cli2cloudformationindunilmixPolicy",
-                  "PolicyDocument": {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                      {
-                        "Effect": "Allow",
-                        "Action": [
-                          "s3:PutBucketNotification"
-                        ],
-                        "Resource": "arn:aws:s3:::indunil1"
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          }
-        }
+        "Resources": {}
       }
     },
     "envVariables": [
@@ -487,7 +213,7 @@
     "projectRegion": "us-east-1",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1562314244693
+    "lastSave": 1562314305601
   },
   "VCS_STATE": {
     "provider": "GitHub",

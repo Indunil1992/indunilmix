@@ -36,6 +36,10 @@ exports.handler = function (event, context, callback) {
             "x": {
                 "DataType": "String",
                 "StringValue": "1"
+            },
+            "d": {
+                "DataType": "String",
+                "StringValue": "1"
             }
         }
     }, function (data) {
