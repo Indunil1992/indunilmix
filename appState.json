@@ -22,7 +22,7 @@
         "children": [],
         "isRemovable": true,
         "filePath": "indunilmix/lambda.js",
-        "code": "let AWS = require('aws-sdk');\nlet SL_AWS = require('slappforge-sdk-aws');\nconst sqs = new SL_AWS.SQS(AWS);\n\nexports.handler = function (event, context, callback) {\n\n\n    sqs.sendMessage({\n        MessageBody: 'SQS check',\n        QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.SIGMA_AWS_ACC_ID}/indunilLIFO`,\n        DelaySeconds: '0',\n        MessageDeduplicationId: '123',\n        MessageGroupId: '142',\n        MessageAttributes: {\n            \"@a\": {\n                \"DataType\": \"String\",\n                \"StringValue\": \"1\"\n            }\n        }\n    }, function (data) {\n        console.log(\"success\" + { data });\n        callback(null, \"Successfully executed to enduser data\" + { data });\n        // your logic (logging etc) to handle successful message delivery, should be here\n\n    }, function (error) {\n        // your logic (logging etc) to handle failures, should be here\n        console.log(\"error \" + { err });\n        callback(null, \"Successfully executed to enduser catch\" + { err });\n    });\n\n    callback(null, { \"message\": \"Successfully executed\" });\n}",
+        "code": "let AWS = require('aws-sdk');\nlet SL_AWS = require('slappforge-sdk-aws');\nconst sqs = new SL_AWS.SQS(AWS);\n\nexports.handler = function (event, context, callback) {\n\n\n    sqs.sendMessage({\n        MessageBody: 'SQS check',\n        QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.SIGMA_AWS_ACC_ID}/indunilLIFO`,\n        DelaySeconds: '0',\n        MessageDeduplicationId: '123',\n        MessageGroupId: '142',\n        MessageAttributes: {\n            \"@a\": {\n                \"DataType\": \"String\",\n                \"StringValue\": \"1\"\n            }\n        }\n    }, function (data) {\n        console.log(\"success - S3\" + { data });\n        callback(null, \"Successfully executed to enduser data\" + { data });\n        // your logic (logging etc) to handle successful message delivery, should be here\n\n    }, function (error) {\n        // your logic (logging etc) to handle failures, should be here\n        console.log(\"error - S3\" + { err });\n        callback(null, \"Successfully executed to enduser catch\" + { err });\n    });\n\n    callback(null, { \"message\": \"Successfully executed\" });\n}",
         "config": {
           "runtime": "nodejs8.10",
           "handler": "handler",
@@ -32,7 +32,7 @@
         },
         "triggers": [
           {
-            "resourceName": "s3indunil1",
+            "resourceName": "s3indunils3",
             "config": {
               "type": "s3:ObjectCreated:Put",
               "keyPrefix": "",
@@ -123,6 +123,17 @@
           "receiveMessageWaitTime": 0,
           "deadLetterQueueName": ""
         }
+      },
+      "s3indunils3": {
+        "name": "s3indunils3",
+        "type": "S3",
+        "config": {
+          "mode": 0,
+          "bucket": {
+            "region": "us-east-1",
+            "name": "indunils3"
+          }
+        }
       }
     },
     "customTemplate": {
@@ -165,7 +176,7 @@
     "projectRegion": "us-east-1",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1562303934913
+    "lastSave": 1562304725276
   },
   "VCS_STATE": {
     "provider": "GitHub",

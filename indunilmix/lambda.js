@@ -18,13 +18,13 @@ exports.handler = function (event, context, callback) {
             }
         }
     }, function (data) {
-        console.log("success" + { data });
+        console.log("success - S3" + { data });
         callback(null, "Successfully executed to enduser data" + { data });
         // your logic (logging etc) to handle successful message delivery, should be here
 
     }, function (error) {
         // your logic (logging etc) to handle failures, should be here
-        console.log("error " + { err });
+        console.log("error - S3" + { err });
         callback(null, "Successfully executed to enduser catch" + { err });
     });
 
