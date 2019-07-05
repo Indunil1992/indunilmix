@@ -22,7 +22,7 @@
         "children": [],
         "isRemovable": true,
         "filePath": "indunilmix/lambda.js",
-        "code": "let AWS = require('aws-sdk');\nlet SL_AWS = require('slappforge-sdk-aws');\nconst sqs = new SL_AWS.SQS(AWS);\n\nexports.handler = function (event, context, callback) {\n\n\n\n\n\n\n    sqs.sendMessage({\n        MessageBody: 'SQS check',\n        QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.SIGMA_AWS_ACC_ID}/IndunilSQS.fifo`,\n        DelaySeconds: '0',\n        MessageDeduplicationId: '123',\n        MessageAttributes: {}\n    }, function (data) {\n        // your logic (logging etc) to handle successful message delivery, should be here\n    }, function (error) {\n        // your logic (logging etc) to handle failures, should be here\n    });\n\n\n\n\n\n\n    callback(null, { \"message\": \"Successfully executed\" });\n}",
+        "code": "let AWS = require('aws-sdk');\nlet SL_AWS = require('slappforge-sdk-aws');\nconst sqs = new SL_AWS.SQS(AWS);\n\nexports.handler = function (event, context, callback) {\n\n\n    sqs.sendMessage({\n        MessageBody: 'SQS check',\n        QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.SIGMA_AWS_ACC_ID}/IndunilSQS.fifo`,\n        DelaySeconds: '0',\n        MessageDeduplicationId: '123',\n        MessageAttributes: {}\n\n    }, function (data) {\n console.log(\"success\" + {data});\n            callback(null, \"Successfully executed to enduser data\" + { data });\n        // your logic (logging etc) to handle successful message delivery, should be here\n\n    }, function (error) {\n        // your logic (logging etc) to handle failures, should be here\n        console.log(\"error \" + {err});\n            callback(null, \"Successfully executed to enduser catch\" + { err });\n    });\n\n    callback(null, { \"message\": \"Successfully executed\" });\n}",
         "config": {
           "runtime": "nodejs8.10",
           "handler": "handler",
@@ -139,7 +139,7 @@
     "projectRegion": "us-east-1",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1562302441559
+    "lastSave": 1562303396318
   },
   "VCS_STATE": {
     "provider": "GitHub",
