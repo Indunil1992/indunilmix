@@ -22,7 +22,7 @@
         "children": [],
         "isRemovable": true,
         "filePath": "indunilmix/lambda.js",
-        "code": "let AWS = require('aws-sdk');\nlet SL_AWS = require('slappforge-sdk-aws');\nconst sqs = new SL_AWS.SQS(AWS);\n\nexports.handler = function (event, context, callback) {\n\n\n    sqs.sendMessage({\n        MessageBody: 'SQS check',\n        QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.SIGMA_AWS_ACC_ID}/indunilLIFO`,\n        DelaySeconds: '0',\n        MessageDeduplicationId: '123',\n        MessageGroupId: '142',\n        MessageAttributes: {\n            \"@a\": {\n                \"DataType\": \"String\",\n                \"StringValue\": \"1\"\n            }\n        }\n    }, function (data) {\n        console.log(\"success - S3\" + { data });\n        callback(null, \"Successfully executed to enduser data\" + { data });\n        // your logic (logging etc) to handle successful message delivery, should be here\n\n    }, function (error) {\n        // your logic (logging etc) to handle failures, should be here\n        console.log(\"error - S3\" + { err });\n        callback(null, \"Successfully executed to enduser catch\" + { err });\n    });\n\n    callback(null, { \"message\": \"Successfully executed\" });\n}",
+        "code": "let AWS = require('aws-sdk');\nlet SL_AWS = require('slappforge-sdk-aws');\nconst sqs = new SL_AWS.SQS(AWS);\n\nexports.handler = function (event, context, callback) {\n\n\n    sqs.sendMessage({\n        MessageBody: 'SQS check',\n        QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.SIGMA_AWS_ACC_ID}/indunilLIFO`,\n        DelaySeconds: '0',\n        MessageDeduplicationId: '123',\n        MessageGroupId: '142',\n        MessageAttributes: {\n            \"@a\": {\n                \"DataType\": \"String\",\n                \"StringValue\": \"1\"\n            }\n        }\n    }, function (data) {\n        console.log(\"success - S3\" + { data });\n        callback(null, \"Successfully executed to enduser data\" + { data });\n        // your logic (logging etc) to handle successful message delivery, should be here\n\n    }, function (error) {\n        // your logic (logging etc) to handle failures, should be here\n        console.log(\"error - S3\" + { err });\n        callback(null, \"Successfully executed to enduser catch\" + { err });\n    });\n\n    sqs.sendMessage({\n        MessageBody: 'hiru test',\n        QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.SIGMA_AWS_ACC_ID}/hiruindu`,\n        DelaySeconds: '0',\n        MessageAttributes: {}\n    }, function (data) {\n        console.log(\"Success\");\n        // your logic (logging etc) to handle successful message delivery, should be here\n    }, function (error) {\n        console.log(\"error\");\n        // your logic (logging etc) to handle failures, should be here\n    });\n\n\n\n    callback(null, { \"message\": \"Successfully executed\" });\n}",
         "config": {
           "runtime": "nodejs8.10",
           "handler": "handler",
@@ -32,9 +32,9 @@
         },
         "triggers": [
           {
-            "resourceName": "s3indunils3",
+            "resourceName": "s3indunil1",
             "config": {
-              "type": "s3:ObjectCreated:Put",
+              "type": "s3:ObjectRemoved:*",
               "keyPrefix": "",
               "keySuffix": ""
             }
@@ -76,7 +76,7 @@
         "type": "SQS",
         "config": {
           "mode": 0,
-          "existing": true,
+          "existing": false,
           "name": "IndunilSQS.fifo",
           "url": "https://sqs.us-east-1.amazonaws.com/318300609668/IndunilSQS.fifo",
           "selectedRegion": "us-east-1",
@@ -103,7 +103,7 @@
         "type": "SQS",
         "config": {
           "mode": 0,
-          "existing": false,
+          "existing": true,
           "name": "indunilLIFO",
           "url": "https://sqs.us-east-1.amazonaws.com/318300609668/indunilLIFO",
           "selectedRegion": "us-east-1",
@@ -121,7 +121,8 @@
           "messageRetentionPeriodUnit": "days",
           "maximumMessageSize": 256,
           "receiveMessageWaitTime": 0,
-          "deadLetterQueueName": ""
+          "deadLetterQueueName": "",
+          "createdByApp": true
         }
       },
       "s3indunils3": {
@@ -133,6 +134,33 @@
             "region": "us-east-1",
             "name": "indunils3"
           }
+        }
+      },
+      "sqshiruindu": {
+        "name": "sqshiruindu",
+        "type": "SQS",
+        "config": {
+          "mode": 0,
+          "existing": false,
+          "name": "hiruindu",
+          "url": "https://sqs.us-east-1.amazonaws.com/318300609668/hiruindu",
+          "selectedRegion": "us-east-1",
+          "deliveryDelay": 0,
+          "deliveryDelayUnit": "seconds",
+          "useRedrivePolicy": false,
+          "useSSE": false,
+          "kmsCustomerMasterKey": "default",
+          "accountId": "318300609668",
+          "dataKeyReusePeriod": 5,
+          "queueType": "standardQueue",
+          "defaultVisibilityTimeout": "120",
+          "defaultVisibilityTimeoutUnit": "seconds",
+          "messageRetentionPeriod": 4,
+          "messageRetentionPeriodUnit": "days",
+          "maximumMessageSize": 256,
+          "receiveMessageWaitTime": 0,
+          "deadLetterQueueName": "",
+          "contentBasedDeduplication": false
         }
       }
     },
@@ -176,7 +204,7 @@
     "projectRegion": "us-east-1",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1562304725276
+    "lastSave": 1562313835237
   },
   "VCS_STATE": {
     "provider": "GitHub",

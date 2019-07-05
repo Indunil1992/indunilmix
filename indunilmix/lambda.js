@@ -28,5 +28,20 @@ exports.handler = function (event, context, callback) {
         callback(null, "Successfully executed to enduser catch" + { err });
     });
 
+    sqs.sendMessage({
+        MessageBody: 'hiru test',
+        QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.SIGMA_AWS_ACC_ID}/hiruindu`,
+        DelaySeconds: '0',
+        MessageAttributes: {}
+    }, function (data) {
+        console.log("Success");
+        // your logic (logging etc) to handle successful message delivery, should be here
+    }, function (error) {
+        console.log("error");
+        // your logic (logging etc) to handle failures, should be here
+    });
+
+
+
     callback(null, { "message": "Successfully executed" });
 }
